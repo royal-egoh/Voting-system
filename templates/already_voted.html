@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Already Voted</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        /* ── Notice Card ── */
+        .notice-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        .notice-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 60px;
+            color: white;
+        }
+
+        .notice-title {
+            color: #17a2b8;
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .notice-subtitle {
+            color: #666;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 35px;
+        }
+
+        /* ── Vote Info Box ── */
+        .vote-info {
+            background: #e7f1ff;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .vote-info .icon {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .vote-info p {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .vote-info p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ── Action Button ── */
+        .btn {
+            width: 100%;
+            padding: 18px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .notice-card {
+                padding: 40px 25px;
+            }
+
+            .notice-title {
+                font-size: 28px;
+            }
+
+            .notice-subtitle {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="notice-card">
+        <!-- Notice Icon -->
+        <div class="notice-icon">✓</div>
+
+        <!-- Notice Message -->
+        <h1 class="notice-title">You Have Already Voted For This Election</h1>
+        <p class="notice-subtitle">
+            Your vote for this election has already been recorded. You cannot vote again.
+        </p>
+
+        <!-- Info Box -->
+        <div class="vote-info">
+            <div class="icon">ℹ️</div>
+            <p>
+                You have already cast your vote in this election. Each voter is allowed only one vote 
+                to ensure fair and democratic results.
+            </p>
+            <p>
+                <strong>Thank you for participating!</strong> You can view the election results once 
+                the voting period ends.
+            </p>
+        </div>
+
+        <!-- Action Button -->
+        <!-- JINJA: Redirect to dashboard -->
+        <a href="{{ url_for('home') }}" class="btn">
+            Return to Dashboard
+        </a>
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/styles.css">
+    <title>Vote Confirmed</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+        }
+
+        /* ── Success Card ── */
+        .success-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 60px;
+            color: white;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .success-title {
+            color: #28a745;
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .success-subtitle {
+            color: #666;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 35px;
+        }
+
+        /* ── Vote Details Box ── */
+        .vote-details {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #888;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-value {
+            color: #333;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        /* ── Candidate Voted Box ── */
+        .voted-candidate {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .candidate-avatar {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .candidate-info {
+            flex: 1;
+            text-align: left;
+        }
+
+        .candidate-label {
+            color: #667eea;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .candidate-name {
+            color: #333;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .candidate-id {
+            color: #888;
+            font-size: 13px;
+        }
+
+        /* ── Confirmation ID Box ── */
+        .confirmation-box {
+            background: #fff3cd;
+            border: 2px dashed #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .confirmation-label {
+            color: #856404;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .confirmation-id {
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+        }
+
+        .confirmation-note {
+            color: #856404;
+            font-size: 12px;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        /* ── Important Notice ── */
+        .notice-box {
+            background: #e7f1ff;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .notice-box .icon {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .notice-box h4 {
+            color: #667eea;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .notice-box p {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* ── Action Buttons ── */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #555;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+            transform: translateY(-2px);
+        }
+
+        /* ── Print Button ── */
+        .print-btn {
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            margin-top: 15px;
+        }
+
+        .print-btn:hover {
+            background: #f0f4ff;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .success-card {
+                padding: 40px 25px;
+            }
+
+            .success-title {
+                font-size: 28px;
+            }
+
+            .success-subtitle {
+                font-size: 16px;
+            }
+
+            .detail-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+
+            .detail-value {
+                text-align: left;
+            }
+
+            .voted-candidate {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .candidate-info {
+                text-align: center;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .confirmation-id {
+                font-size: 18px;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .action-buttons,
+            .print-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="success-card">
+        <!-- Success Icon -->
+        <div class="success-icon">✓</div>
+
+        <!-- Success Message -->
+        <h1 class="success-title">Vote Successfully Captured!</h1>
+        <p class="success-subtitle">
+            Thank you for participating in this election. Your vote has been securely recorded and will be counted.
+        </p>
+
+        <!-- Voted Candidate Box -->
+        <div class="voted-candidate">
+            <!-- JINJA: First letter of candidate name -->
+            <div class="candidate-avatar">{{ voted_candidate.name[0].upper() }}</div>
+            
+            <div class="candidate-info">
+                <div class="candidate-label">You Voted For</div>
+                <!-- JINJA: Candidate name -->
+                <div class="candidate-name">{{ voted_candidate.name }}</div>
+                <!-- JINJA: Candidate ID -->
+                <div class="candidate-id">{{ voted_candidate.candidate_id }}</div>
+            </div>
+        </div>
+
+        <!-- Vote Details -->
+        <div class="vote-details">
+            <div class="detail-row">
+                <span class="detail-label">Election</span>
+                <!-- JINJA: Election title -->
+                <span class="detail-value">{{ election.title }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Position</span>
+                <!-- JINJA: Position -->
+                <span class="detail-value">{{ election.position }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Voter Name</span>
+                <!-- JINJA: Voter name -->
+                <span class="detail-value">{{ voter.name }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Date & Time</span>
+                <!-- JINJA: Vote timestamp -->
+                <span class="detail-value">{{ vote.timestamp }}</span>
+            </div>
+        </div>
+
+  
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="{{ url_for('election_result', election_id=election.election_id) }}" class="btn btn-secondary">
+                View Results
+            </a>
+            <a href="{{ url_for('home') }}" class="btn btn-primary">
+                Return to Dashboard
+            </a>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

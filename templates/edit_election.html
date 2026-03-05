@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/styles.css">
+    <title>Edit Election</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        /* Internal CSS */
+        .alert-success {
+            background-color: #efe;
+            color: #3c3;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .alert-fail {
+            background-color: #fee;
+            color: #c33;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: #e0e0e0;
+            color: #333;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .back-btn:hover {
+            background: #d0d0d0;
+            transform: translateY(-2px);
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .section-title {
+            color: #333;
+            font-size: 22px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="datetime-local"],
+        .form-group input[type="date"],
+        .form-group input[type="time"],
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            font-family: Arial, sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group small {
+            display: block;
+            color: #666;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        .date-time-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Candidates Section */
+        .candidates-container {
+            margin-top: 20px;
+        }
+
+        .candidate-item {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .candidate-number {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .remove-candidate-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .remove-candidate-btn:hover {
+            background: #c82333;
+            transform: rotate(90deg);
+        }
+
+        .candidate-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .file-upload-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border: 2px dashed #667eea;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload-label:hover {
+            background: #e7f1ff;
+            border-color: #764ba2;
+        }
+
+        .file-upload-input {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-name {
+            display: block;
+            color: #666;
+            font-size: 15px;
+            margin-top: 5px;
+        }
+
+        .current-photo {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #e7f1ff;
+            border-radius: 5px;
+            font-size: 13px;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .add-candidate-btn {
+            width: 100%;
+            padding: 15px;
+            background: white;
+            color: #28a745;
+            border: 2px dashed #28a745;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .add-candidate-btn:hover {
+            background: #d4edda;
+            transform: translateY(-2px);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .date-time-grid,
+            .candidate-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .form-container {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <!-- JINJA: Back to view election -->
+            <a href="{{ url_for('view_election', election_id=election.election_id) }}" class="back-btn">
+                ← Back to Election
+            </a>
+            <h1>Edit Election</h1>
+            <p>Update the details of your election</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" style="display: block;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <div class="form-container">
+            <!-- JINJA: Form action should post to edit endpoint -->
+            <form action="{{ url_for('edit_election', election_id=election.election_id) }}" method="POST" enctype="multipart/form-data">
+                
+                <!-- Election Information Section -->
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">📋</span>
+                        Election Information
+                    </h2>
+
+                    <div class="form-group">
+                        <label for="election-title">Election Title <span class="required">*</span></label>
+                        <!-- JINJA: Pre-fill with existing value -->
+                        <input type="text" id="election-title" name="election_title" required placeholder="e.g., 2024 Presidential Election" value="{{ election.title }}">
+                        <small>Give your election a clear and descriptive title</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="position">Position/Office <span class="required">*</span></label>
+                        <!-- JINJA: Pre-fill with existing value -->
+                        <input type="text" id="position" name="position" required placeholder="e.g., President, Vice President, Senator" value="{{ election.position }}">
+                        <small>What position are candidates running for?</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Election Description</label>
+                        <!-- JINJA: Pre-fill with existing value -->
+                        <textarea id="description" name="description" placeholder="Provide additional details about this election...">{{ election.description }}</textarea>
+                        <small>Optional: Add any additional information voters should know</small>
+                    </div>
+
+                    <div class="date-time-grid">
+                        <div class="form-group">
+                            <label for="start-datetime">Start Date & Time <span class="required">*</span></label>
+                            <!-- JINJA: Pre-fill with existing value formatted for datetime-local input -->
+                            <input type="datetime-local" id="start-datetime" name="start_datetime" required value="{{ election.start_datetime.strftime('%Y-%m-%dT%H:%M') }}">
+                            <small>When will voting begin?</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="end-datetime">End Date & Time <span class="required">*</span></label>
+                            <!-- JINJA: Pre-fill with existing value formatted for datetime-local input -->
+                            <input type="datetime-local" id="end-datetime" name="end_datetime" required value="{{ election.end_datetime.strftime('%Y-%m-%dT%H:%M') }}">
+                            <small>When will voting close?</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Candidates Section -->
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">👥</span>
+                        Candidates
+                    </h2>
+
+                    <div class="candidates-container" id="candidates-container">
+                        
+                        <!-- JINJA: Loop through existing candidates -->
+                        {% for candidate in election.candidates %}
+                        <div class="candidate-item">
+                            <span class="candidate-number">Candidate #{{ loop.index }}</span>
+                            <!-- Show remove button only if more than 2 candidates -->
+                            {% if election.candidates|length > 2 %}
+                            <button type="button" class="remove-candidate-btn" onclick="removeCandidate(this)">×</button>
+                            {% endif %}
+                            
+                            <!-- JINJA: Hidden field for candidate ID (to update existing) -->
+                            <input type="hidden" name="existing_candidate_id" value="{{ candidate.cand_id }}">
+                            
+                            <div class="candidate-grid">
+                                <div class="form-group">
+                                    <label>Full Name <span class="required">*</span></label>
+                                    <!-- JINJA: Pre-fill with existing value -->
+                                    <input type="text" name="candidate_name" required placeholder="e.g., John Doe" value="{{ candidate.cand_name }}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Candidate ID Number <span class="required">*</span></label>
+                                    <!-- JINJA: Pre-fill with existing value -->
+                                    <input type="text" name="candidate_id" required placeholder="e.g., CAND-001" value="{{ candidate.cand_id }}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Email Address</label>
+                                    <!-- JINJA: Pre-fill with existing value -->
+                                    <input type="text" name="candidate_email" placeholder="candidate@example.com" value="{{ candidate.cand_email }}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Candidate Photo</label>
+                                <!-- JINJA: Show current photo if exists -->
+                                <!-- {% if candidate.cand_photo %}
+                                <div class="current-photo">
+                                    📷 Current photo: {{ candidate.cand_photo }}
+                                </div> -->
+                                {% endif %}
+                                <div class="file-upload-wrapper">
+                                    <label class="file-upload-label">
+                                        <input type="file" name="candidate_photo" accept="image/*" class="file-upload-input" onchange="updateFileName(this)">
+                                        <span>📷</span>
+                                        <span>{% if candidate.cand_photo %}Change Photo{% else %}Choose Photo{% endif %}</span>
+                                    </label>
+                                </div>
+                                <span class="file-name">No new file chosen</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+
+                    <button type="button" class="add-candidate-btn" onclick="addCandidate()">
+                        <span style="font-size: 20px;">+</span>
+                        Add Another Candidate
+                    </button>
+                </div>
+
+                <!-- Additional Settings Section -->
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">⚙️</span>
+                        Additional Settings
+                    </h2>
+
+                    <div class="form-group">
+                        <label>
+                            <!-- JINJA: Pre-check if true -->
+                            <input type="checkbox" name="send_notifications" value="1" {% if election.send_notifications %}checked{% endif %}>
+                            Send email notifications to eligible voters
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
+                    <button type="submit" name="action" value="publish" class="btn btn-primary">Update Election</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        setTimeout(function() {
+            document.querySelectorAll('.alert').forEach(function(el) {
+                el.style.display = 'none';
+            });
+        }, 3000);
+
+        let candidateCount = 0;
+        candidateCount = {{ election.candidates|length }};
+
+        function addCandidate() {
+            candidateCount++;
+            const container = document.getElementById('candidates-container');
+            
+            const candidateHTML = `
+                <div class="candidate-item">
+                    <span class="candidate-number">Candidate #${candidateCount}</span>
+                    <button type="button" class="remove-candidate-btn" onclick="removeCandidate(this)">×</button>
+                    
+                    <div class="candidate-grid">
+                        <div class="form-group">
+                            <label>Full Name <span class="required">*</span></label>
+                            <input type="text" name="candidate_name" required placeholder="e.g., John Doe">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Candidate ID Number <span class="required">*</span></label>
+                            <input type="text" name="candidate_id" required placeholder="e.g., CAND-00${candidateCount}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="text" name="candidate_email" placeholder="candidate@example.com">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Candidate Photo</label>
+                        <div class="file-upload-wrapper">
+                            <label class="file-upload-label">
+                                <input type="file" name="candidate_photo" accept="image/*" class="file-upload-input" onchange="updateFileName(this)" required>
+                                <span>📷</span>
+                                <span>Choose Photo</span>
+                            </label>
+                        </div>
+                        <span class="file-name">No file chosen</span>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', candidateHTML);
+            updateCandidateNumbers();
+        }
+
+        function removeCandidate(button) {
+            if (candidateCount <= 2) {
+                alert('You must have at least 2 candidates for an election.');
+                return;
+            }
+            
+            button.parentElement.remove();
+            candidateCount--;
+            updateCandidateNumbers();
+        }
+
+        function updateCandidateNumbers() {
+            const candidates = document.querySelectorAll('.candidate-item');
+            candidates.forEach((candidate, index) => {
+                const numberSpan = candidate.querySelector('.candidate-number');
+                numberSpan.textContent = `Candidate #${index + 1}`;
+            });
+        }
+
+        function updateFileName(input){
+            const formGroup = input.closest('.form-group');
+            const fileNameSpan = formGroup.querySelector('.file-name');
+
+            if (input.files.length > 0) {
+                fileNameSpan.textContent = input.files[0].name;
+                fileNameSpan.style.color = '#28a745';
+                
+            } else {
+                fileNameSpan.textContent = 'No new file chosen';
+                fileNameSpan.style.color = '#666';
+            }
+        }
+
+        // Update end datetime minimum when start datetime changes
+        window.onload = function() {
+            document.getElementById('start-datetime').addEventListener('change', function() {
+                document.getElementById('end-datetime').min = this.value;
+            });
+        };
+    </script>
+</body>
+</html>

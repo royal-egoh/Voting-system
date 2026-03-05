@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/styles.css">
+    <title>Cast Your Vote</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* ── Header ── */
+        .header {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .election-title {
+            color: #333;
+            font-size: 36px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .election-position {
+            color: #667eea;
+            font-size: 20px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .election-description {
+            color: #666;
+            font-size: 15px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .election-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .info-icon {
+            font-size: 18px;
+        }
+
+        /* ── Voter Info ── */
+        .voter-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            padding: 25px 35px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .voter-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .voter-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .voter-name {
+            color: #333;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .voter-id {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .vote-status {
+            padding: 8px 20px;
+            background: #fff3cd;
+            color: #856404;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .vote-status.voted {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        /* ── Instructions ── */
+        .instructions {
+            background: #e7f1ff;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin-bottom: 25px;
+        }
+
+        .instructions h3 {
+            color: #667eea;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .instructions p {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* ── Voting Form ── */
+        .voting-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            padding: 35px;
+            margin-bottom: 20px;
+        }
+
+        .section-header {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* ── Candidate Cards ── */
+        .candidates-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .candidate-option {
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 0;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .candidate-option:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.15);
+        }
+
+        /* When radio is checked */
+        .candidate-radio:checked + .candidate-content {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-left: 6px solid #667eea;
+        }
+
+        .candidate-radio:checked ~ .checkmark {
+            opacity: 1;
+        }
+
+        .candidate-radio {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .candidate-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 25px;
+            transition: all 0.3s;
+        }
+
+        .candidate-photo-box {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .candidate-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .candidate-photo-placeholder {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .candidate-details {
+            flex: 1;
+        }
+
+        .candidate-name {
+            color: #333;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .candidate-id {
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        /* Checkmark indicator */
+        .checkmark {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s;
+            flex-shrink: 0;
+        }
+
+        /* ── Form Actions ── */
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 18px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-cancel {
+            background: #e0e0e0;
+            color: #555;
+        }
+
+        .btn-cancel:hover {
+            background: #d0d0d0;
+        }
+
+        /* ── Confirmation Notice ── */
+        .confirmation-notice {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px 25px;
+            margin-top: 20px;
+            display: flex;
+            align-items: start;
+            gap: 15px;
+        }
+
+        .confirmation-notice .icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .confirmation-notice .text {
+            color: #856404;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .confirmation-notice strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 15px;
+        }
+
+        /* ── Success Message (hidden by default) ── */
+        .success-message {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            padding: 60px 40px;
+            text-align: center;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .success-icon {
+            font-size: 100px;
+            margin-bottom: 20px;
+        }
+
+        .success-message h2 {
+            color: #28a745;
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .success-message p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .success-details {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .success-details p {
+            color: #555;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .header {
+                padding: 30px 25px;
+            }
+
+            .election-title {
+                font-size: 28px;
+            }
+
+            .election-position {
+                font-size: 18px;
+            }
+
+            .voter-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .candidate-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="header">
+        <!-- JINJA: Replace with actual election title -->
+        <h1 class="election-title">{{ election.title }}</h1>
+        
+        <!-- JINJA: Replace with actual position -->
+        <div class="election-position">Position: {{ election.position }}</div>
+        
+        <!-- JINJA: Replace with actual description (optional) -->
+        <p class="election-description">{{ election.description }}</p>
+        
+        <div class="election-info">
+            <div class="info-item">
+                <span class="info-icon">📅</span>
+                <span>{{ election.start_datetime }} - {{ election.end_datetime }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-icon">👥</span>
+            <span>{{ election.candidates|length }} Candidates</span>
+            </div>
+            <div class="info-item">
+                <span class="info-icon">🗳️</span>
+                <span>{{ total_votes }} Votes Cast</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="voter-card">
+        <div class="voter-info">
+            <div class="voter-avatar">{{ voter.fullName.upper() }}</div>
+            <div>
+                <!-- JINJA: Replace with voter name -->
+                <div class="voter-name">{{ voter.fullName }}</div>
+                <!-- JINJA: Replace with voter ID -->
+                <div class="voter-id">Voter ID: {{ voter.id }}</div>
+            </div>
+        </div>
+        <div class="vote-status {% if has_voted %}voted{% endif %}">
+    {% if has_voted %}✓ Already Voted{% else %}Not Yet Voted{% endif %}
+</div>
+    </div>
+
+    <!-- Voting Form -->
+    <!-- JINJA: Form action should post to vote endpoint with election_id -->
+    <form action="{{ url_for('vote', election_id=election.election_id) }}" method="POST">
+        
+        <div class="voting-section">
+            <h2 class="section-header">
+                <span>🗳️</span>
+                Select Your Candidate
+            </h2>
+
+            <div class="candidates-list">
+
+                {% for candidate in election.candidates %}
+                <label class="candidate-option">
+                    <input type="radio" name="candidate_id" value="{{ candidate.cand_id }}" class="candidate-radio" required>
+                    
+                    <div class="candidate-content">
+                        {% if candidate.cand_photo %}
+                        <div class="candidate-photo-box">
+                            <img src="data:image/png;base64,{{ candidate.photo_data }}" alt="{{ candidate.cand_name }}" class="candidate-photo">
+                        </div>
+                        {% else %}
+                        <div class="voter-avatar candidate-photo-placeholder">
+                            {{ candidate.cand_name[0].upper()}}</div>
+                           
+                        {% endif %}
+                        
+                        <div class="candidate-details">
+                            <div class="candidate-name">{{ candidate.cand_name }}</div>
+                            <div class="candidate-id">Candidate ID: {{ candidate.cand_id }}</div>
+                        </div>
+
+                        <div class="checkmark">✓</div>
+                    </div>
+                </label>
+
+                {% endfor %}
+                
+
+            </div>
+
+        
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="button" class="btn btn-cancel" onclick="window.history.back()">Cancel</button>
+                <button type="submit" class="btn btn-submit" onclick="return confirm('Are you sure you want to submit your vote? This action cannot be undone.');">Submit My Vote</button>
+            </div>
+        </div>
+
+        
+    </form>
+
+
+</div>
+</body>
+</html>

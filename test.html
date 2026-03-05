@@ -1,0 +1,38 @@
+.error-message {
+  
+            background-color: #fee;
+            color: #c33;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .success-message {
+  
+            background-color: #efe;
+            color: #3c3;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+{% with messages = get_flashed_messages(with_categories=True) %}
+  {% for category, message in messages %}
+    <div class="alert alert-{{ category }}" style="display: block;">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endwith %}
+
+
+
+
+<script>
+  setTimeout(function() {
+    document.querySelectorAll('.alert').forEach(function(el) {
+      el.style.display = 'none';
+    });
+  }, 3000);
+</script>
